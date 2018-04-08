@@ -31,10 +31,10 @@ function setup() {
                 grassArr.push(new Grass(x*1, y*1, 1));
             }
             else if(matrix[y][x] == 2) {
-                xotakerArr.push(new Xotaker(x*1, y*1, 2));
+                xotakerArr.push(new GrassEater(x*1, y*1, 2));
             }
             else if(matrix[y][x] == 3) {
-                gishatichArr.push(new Gishatich(x*1, y*1, 3))
+                gishatichArr.push(new Predator(x*1, y*1, 3))
             }
         }
     }
