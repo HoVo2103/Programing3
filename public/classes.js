@@ -46,7 +46,7 @@ class Grass {
     }
 }
 
-class Xotaker {
+class GrassEater {
     constructor(x, y, index) {
         this.x = x;
         this.y = y;
@@ -127,7 +127,7 @@ class Xotaker {
         var vand = random(this.yntrelVandak(0));
         if (vand && this.energy >= this.speed) {
             this.energy = 1;
-            var newxotaker = new Xotaker(vand[0], vand[1], 2);
+            var newxotaker = new GrassEater(vand[0], vand[1], 2);
             xotakerArr.push(newxotaker);
         }
     }
@@ -144,7 +144,7 @@ class Xotaker {
     }
 }
 
-class Gishatich {
+class Predator {
     constructor(x, y, index) {
         this.x = x;
         this.y = y;
@@ -223,7 +223,7 @@ class Gishatich {
         var vand = random(this.yntrelVandak(0));
         if (vand && this.energy >= this.speed) {
             this.energy = 1;
-            var newgishatich = new Gishatich(vand[0], vand[1], 3);
+            var newgishatich = new Predator(vand[0], vand[1], 3);
             gishatichArr.push(newgishatich);
         }
     }
