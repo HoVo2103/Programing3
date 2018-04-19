@@ -35,7 +35,7 @@ var obj = {
 };
 
 function main() {
-    fs.writeFile("obj.json", JSON.stringify(obj), function () {
+    fs.writeFile("obj.json", JSON.stringify(obj, null, "\t"), function () {
         console.log("obj.json created.");
     });
 }

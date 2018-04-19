@@ -1,14 +1,19 @@
 class Grass extends LivingCreature {
+    constructor(x, y, index) {
+        super(x, y, index);
+        this.multiply = Math.round(Math.random() * 8);
+        this.speed = 8;
+    }
+    
     mul() {
         this.multiply++;
-        this.direction = random(this.chooseCell(0));
-        if (this.multiply >= this.speed && this.direction) {
-            var newGrass = new Grass(this.direction[0], this.direction[1], this.index);
-            newGrass.parentX = this.x;
-            newGrass.parentY = this.y;
+        var newCell = random(super.chooseCell(0));
+        if(this.multiply >= 8 && newCell) {
+            var newGrass = new Grass(newCell[0],newCell[1], this.index);
             grassArr.push(newGrass);
-            matrix[this.direction[1]][this.direction[0]] = this.index;
+            matrix[newCell[1]][newCell[0]] = this.index;
             this.multiply = 0;
         }
     }
-};
+}
+

@@ -1,17 +1,22 @@
-class Predator extends LivingCreature {
+class Virus extends LivingCreature {
     constructor(x, y, index) {
         super(x, y, index);
-        this.energy = Math.round(Math.random() * 16);
-        this.speed = 24;
-        this.multiply = Math.round(Math.random() * 16);
+        this.energy = Math.round(Math.random() * 20);
+        this.speed = 8;
+        this.multiply = Math.round(Math.random() * 20);
         this.emptyORgrass = 0;
+
+        this.cell = [
+            random(super.chooseCell(0)),
+            random(super.chooseCell(1)),
+            random(super.chooseCell(2)),
+            random(super.chooseCell(3))
+        ];
     }
 
     move() {
-        var cell0 = random(super.chooseCell(0));
-        var cell1 = random(super.chooseCell(1));
-        var r = Math.round(random(1));
-        var cell = r == 0 ? cell0 : cell1;
+        var r = Math.round(random(3));
+        var cell = this.cell[r];
 
         if (cell && this.multiply >= this.speed / 2) {
             this.energy--;
@@ -28,7 +33,7 @@ class Predator extends LivingCreature {
         }
     }
 
-    eat() {
+    infect() {
         this.energy--;
         var cell = random(super.chooseCell(2));
         if (cell && this.multiply >= this.speed / 2) {

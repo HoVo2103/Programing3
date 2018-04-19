@@ -2,9 +2,10 @@ class LivingCreature {
     constructor(x, y, index) {
         this.x = x;
         this.y = y;
-        this.energy = 8;
-        this.multiply = 0;
         this.index = index;
+        this.energy;
+        this.multiply;
+        this.speed;
         this.directions = [
             [this.x - 1, this.y - 1],
             [this.x, this.y - 1],
@@ -15,8 +16,8 @@ class LivingCreature {
             [this.x, this.y + 1],
             [this.x + 1, this.y + 1]
         ];
-
     }
+
     chooseCell(ch) {
         var found = [];
         for (var i in this.directions) {

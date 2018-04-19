@@ -1,3 +1,5 @@
+// ? index, multiply, energy, directions, matrix[this.y][this.x] ?
+
 class Grass {
     constructor(x, y, index) {
         this.x = x;
@@ -5,7 +7,7 @@ class Grass {
         this.index = index;
         this.multiply = Math.round(Math.random() * 8);
         this.speed = 8;
-        matrix[this.y][this.x] = this.index;
+        // matrix[this.y][this.x] = this.index;
         this.directions = [
             [this.x - 1, this.y - 1],
             [this.x, this.y - 1],
@@ -18,7 +20,8 @@ class Grass {
         ];
 
     }
-    yntrelVandak(ch) {
+
+    chooseCell(ch) {
         var found = [];
         for (var i in this.directions) {
             var x = this.directions[i][0];
@@ -34,7 +37,7 @@ class Grass {
 
     mul() {
         this.multiply++;
-        this.direction = random(this.yntrelVandak(0));
+        this.direction = random(this.chooseCell(0));
         if (this.multiply >= this.speed && this.direction) {
             var newGrass = new Grass(this.direction[0], this.direction[1], this.index);
             newGrass.parentX = this.x;
@@ -54,7 +57,7 @@ class GrassEater {
         this.energy = Math.round(Math.random() * 8);
         this.multiply = Math.round(Math.random() * 8);
         this.speed = 8;
-        matrix[this.y][this.x] = this.index;
+        // matrix[this.y][this.x] = this.index;
         this.directions = [
             [this.x - 1, this.y - 1],
             [this.x, this.y - 1],
@@ -67,7 +70,8 @@ class GrassEater {
         ];
 
     }
-    yntrelVandak(ch) {
+
+    chooseCell(ch) {
         var found = [];
         for (var i in this.directions) {
             var x = this.directions[i][0];
@@ -80,22 +84,23 @@ class GrassEater {
         }
         return found;
     }
-    stanalNorKordinatner() {
-        this.directions = [
-            [this.x - 1, this.y - 1],
-            [this.x, this.y - 1],
-            [this.x + 1, this.y - 1],
-            [this.x - 1, this.y],
-            [this.x + 1, this.y],
-            [this.x - 1, this.y + 1],
-            [this.x, this.y + 1],
-            [this.x + 1, this.y + 1]
-        ];
-    }
 
-    sharjvel() {
-        var vand = random(this.yntrelVandak(0));
-        if (vand && this.multiply >= this.speed / 4) {
+    // stanalNorKordinatner() {
+    //     this.directions = [
+    //         [this.x - 1, this.y - 1],
+    //         [this.x, this.y - 1],
+    //         [this.x + 1, this.y - 1],
+    //         [this.x - 1, this.y],
+    //         [this.x + 1, this.y],
+    //         [this.x - 1, this.y + 1],
+    //         [this.x, this.y + 1],
+    //         [this.x + 1, this.y + 1]
+    //     ];
+    // }
+
+    move() {
+        var vand = random(this.chooseCell(0));
+        if (vand && this.multiply >= this.speed / 4) { // ?
             this.energy--;
             matrix[this.y][this.x] = 0;
             this.x = vand[0]; this.y = vand[1];
@@ -104,11 +109,11 @@ class GrassEater {
         }
     }
 
-    utel() {
+    eat() {
         this.energy--;
         this.multiply++;
-        var vand = random(this.yntrelVandak(1));
-        if (vand && this.multiply >= this.speed / 4) {
+        var vand = random(this.chooseCell(1));
+        if (vand && this.multiply >= this.speed / 4) { // ?
             this.energy += this.speed;
             matrix[this.y][this.x] = 0;
             this.x = vand[0]; this.y = vand[1];
@@ -119,21 +124,20 @@ class GrassEater {
                 }
             }
         }
-        else this.sharjvel();
-
+        else this.move();
     }
 
-    bazmanal() {
-        var vand = random(this.yntrelVandak(0));
-        if (vand && this.energy >= this.speed) {
+    mul() {
+        var vand = random(this.chooseCell(0));
+        if (vand && this.energy >= this.speed) { // ?
             this.energy = 1;
             var newxotaker = new GrassEater(vand[0], vand[1], 2);
             xotakerArr.push(newxotaker);
         }
     }
 
-    mahanal() {
-        if (this.energy <= -(this.speed / 2)) {
+    die() {
+        if (this.energy <= -(this.speed / 2)) { // ?
             matrix[this.y][this.x] = 0;
             for (var i in xotakerArr) {
                 if (xotakerArr[i].x == this.x && xotakerArr[i].y == this.y) {
@@ -152,7 +156,7 @@ class Predator {
         this.energy = Math.round(Math.random() * 16);
         this.speed = 24;
         this.multiply = Math.round(Math.random() * 16);
-        matrix[this.y][this.x] = this.index;
+        // matrix[this.y][this.x] = this.index;
         this.directions = [
             [this.x - 1, this.y - 1],
             [this.x, this.y - 1],
@@ -163,10 +167,10 @@ class Predator {
             [this.x, this.y + 1],
             [this.x + 1, this.y + 1]
         ];
-
     }
-    yntrelVandak(ch) {
-        this.stanalNorKordinatner();
+
+    chooseCell(ch) {
+        // this.stanalNorKordinatner();
         var found = [];
         for (var i in this.directions) {
             var x = this.directions[i][0];
@@ -179,21 +183,22 @@ class Predator {
         }
         return found;
     }
-    stanalNorKordinatner() {
-        this.directions = [
-            [this.x - 1, this.y - 1],
-            [this.x, this.y - 1],
-            [this.x + 1, this.y - 1],
-            [this.x - 1, this.y],
-            [this.x + 1, this.y],
-            [this.x - 1, this.y + 1],
-            [this.x, this.y + 1],
-            [this.x + 1, this.y + 1]
-        ];
-    }
 
-    sharjvel() {
-        var vand = random(this.yntrelVandak(0));
+    // stanalNorKordinatner() {
+    //     this.directions = [
+    //         [this.x - 1, this.y - 1],
+    //         [this.x, this.y - 1],
+    //         [this.x + 1, this.y - 1],
+    //         [this.x - 1, this.y],
+    //         [this.x + 1, this.y],
+    //         [this.x - 1, this.y + 1],
+    //         [this.x, this.y + 1],
+    //         [this.x + 1, this.y + 1]
+    //     ];
+    // }
+
+    move() {
+        var vand = random(this.chooseCell(0));
         if (vand && this.multiply >= this.speed / 2) {
             this.energy--;
             matrix[this.y][this.x] = 0;
@@ -202,11 +207,11 @@ class Predator {
         }
     }
 
-    utel() {
+    eat() {
         this.energy--;
-        var vand = random(this.yntrelVandak(2));
+        var vand = random(this.chooseCell(2));
         if (vand && this.multiply >= this.speed / 2) {
-            this.energy += this.speed/2;
+            this.energy += this.speed / 2;
             matrix[this.y][this.x] = 0;
             this.x = vand[0]; this.y = vand[1];
             matrix[this.y][this.x] = 3;
@@ -216,11 +221,11 @@ class Predator {
                 }
             }
         }
-        else this.sharjvel();
+        else this.move();
     }
 
-    bazmanal() {
-        var vand = random(this.yntrelVandak(0));
+    mul() {
+        var vand = random(this.chooseCell(0));
         if (vand && this.energy >= this.speed) {
             this.energy = 1;
             var newgishatich = new Predator(vand[0], vand[1], 3);
@@ -228,7 +233,7 @@ class Predator {
         }
     }
 
-    mahanal() {
+    die() {
         if (this.energy <= -(this.speed / 2)) {
             matrix[this.y][this.x] = 0;
             for (var i in gishatichArr) {
