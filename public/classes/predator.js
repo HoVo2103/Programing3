@@ -36,9 +36,9 @@ class Predator extends LivingCreature {
             matrix[this.y][this.x] = 0;
             this.x = cell[0]; this.y = cell[1];
             matrix[this.y][this.x] = 3;
-            for (var i in xotakerArr) {
-                if (xotakerArr[i].x == this.x && xotakerArr[i].y == this.y) {
-                    xotakerArr.splice(i, 1);
+            for (var i in grassEaterArr) {
+                if (grassEaterArr[i].x == this.x && grassEaterArr[i].y == this.y) {
+                    grassEaterArr.splice(i, 1);
                     break;
                 }
             }
@@ -46,21 +46,26 @@ class Predator extends LivingCreature {
         else this.move();
     }
 
+    infected() {
+        this.speed /= 2;
+        this.energy -= 2;
+    }
+
     mul() {
         var cell = random(super.chooseCell(0));
         if (cell && this.energy >= this.speed) {
             this.energy = 1;
             var newpredator = new Predator(cell[0], cell[1], 3);
-            gishatichArr.push(newpredator);
+            predatorArr.push(newpredator);
         }
     }
 
     die() {
         if (this.energy <= -(this.speed / 2)) {
             matrix[this.y][this.x] = this.emptyORgrass == 0 ? 0 : 1;
-            for (var i in gishatichArr) {
-                if (gishatichArr[i].x == this.x && gishatichArr[i].y == this.y) {
-                    gishatichArr.splice(i, 1);
+            for (var i in predatorArr) {
+                if (predatorArr[i].x == this.x && predatorArr[i].y == this.y) {
+                    predatorArr.splice(i, 1);
                     break;
                 }
             }

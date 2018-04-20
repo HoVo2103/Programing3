@@ -10,7 +10,14 @@ function genMatrix(w, h) {
             else if(r < 100)r = 3;
             matrix[y][x] = r;
         }
-    }
+    }   
+    var r = Math.round(random(w - 1));
+    for (var i in matrix[r]) {
+        if(matrix[r][i] == 0) {
+            matrix[r][i] = 4;
+            break;
+        }              
+    }  
     return matrix;
 }
 
@@ -37,7 +44,7 @@ function setup() {
                 predatorArr.push(new Predator(x*1, y*1, 3))
             }
             else if(matrix[y][x] == 4) {
-                predatorArr.push(new Virus(x*1, y*1, 4))
+                virusArr.push(new Virus(x*1, y*1, 4))
             }
         }
     }
@@ -47,6 +54,7 @@ function draw() {
     background("#acacac");
     for(var y in matrix) {
         for(var x in matrix[y]) {
+            // normal
             if(matrix[y][x] == 0) {
                 fill("#acacac");
             }
@@ -58,6 +66,13 @@ function draw() {
             }
             else if(matrix[y][x] == 3) {
                 fill("red");
+            }
+            else if(matrix[y][x] == 4) {
+                fill("black");
+            }
+            // infected grasseater
+            else if(matrix[y][x] == 5) {
+                fill("#D0D000");
             }
             rect(x * side, y * side, side, side);
         }
