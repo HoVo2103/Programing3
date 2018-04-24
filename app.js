@@ -27,17 +27,17 @@ app.listen(3000, function () {
 });
 
 // Main part
-var obj = {
-    "first_name": "Vardan",
-    "last_name": "Hovsepyan",
-    "age": 13,
-    "tumo_student": true
-};
+// var obj = {
+//     "first_name": "Vardan",
+//     "last_name": "Hovsepyan",
+//     "age": 13,
+//     "tumo_student": true
+// };
 
-function main() {
-    fs.writeFile("obj.json", JSON.stringify(obj, null, "\t"), function () {
-        console.log("obj.json created.");
-    });
-}
+// function main() {
+//     fs.writeFile("obj.json", JSON.stringify(obj, null, "\t"), function () {
+//         console.log("obj.json created.");
+//     });
+// }
 
-main();
+// main();
