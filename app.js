@@ -1,12 +1,14 @@
-var fs = require("fs");
-var express = require("express");
+var fs = require('fs');
+var express = require('express');
 var app = express();
+var server = require('http').Server(app);
+var io = require('socket.io')(server);
 
 app.use(express.static("public"));
 
 // Paths
 app.get("/", function (req, res) {
-    res.redirect("public");
+    res.redirect("index.html");
 });
 // Redirect to google
 app.get("/google", function (req, res) {
@@ -26,18 +28,43 @@ app.listen(3000, function () {
     console.log("App is running on port 3000");
 });
 
-// Main part
-// var obj = {
-//     "first_name": "Vardan",
-//     "last_name": "Hovsepyan",
-//     "age": 13,
-//     "tumo_student": true
-// };
+// part of the game
+function my_random(max, min = 0) {
+    if (Number.isInteger(min) && Number.isInteger(max)) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+}
 
-// function main() {
-//     fs.writeFile("obj.json", JSON.stringify(obj, null, "\t"), function () {
-//         console.log("obj.json created.");
-//     });
-// }
+function gen_matrix(w, h) {
+    var matrix = [];
+    for (var y = 0; y < h; y++) {
+        matrix[y] = [];
+        for (var x = 0; x < w; x++) {
+            var r = my_random(100);
+            if (r < 20) r = 0;
+            else if (r < 65) r = 1;
+            else if (r < 90) r = 2;
+            else if (r < 100) r = 3;
+            matrix[y][x] = r;
+        }
+    }
+    var r = my_random(w - 1);
+    for (var i in matrix[r]) {
+        if (matrix[r][i] == 0) {
+            matrix[r][i] = 4;
+            break;
+        }
+    }
+    return matrix;
+}
 
-// main();
+var w = 30;
+var h = 30;
+var side = 24;
+var matrix = gen_matrix(w, h);
+var grassArr = [], grassEaterArr = [], predatorArr = [], virusArr = [];
+
+// server & client contact
+io.on("connection", function (socket) {
+    io.sockets.emit("size of canvas", { "width": w, "height": h, "size": size });
+});

@@ -1,3 +1,5 @@
+// var socket = io.connect('http://localhost:3000');
+
 function genMatrix(w, h) {
     var matrix = [];
     for(var y = 0; y < h; y++) {
@@ -28,6 +30,7 @@ var side = 24;
 var grassArr = [], grassEaterArr = [], predatorArr = [], virusArr = [];
 
 function setup() {
+    var socket = io.connect('http://localhost:3000');
     matrix = genMatrix(w, h);
     createCanvas(side * w, side * h);
     background("#acacac");
@@ -96,6 +99,7 @@ function draw() {
 
     for(var i in virusArr) {
         virusArr[i].mul();
+        // virusArr[i].move();
         virusArr[i].infect();
         virusArr[i].die();
     }
