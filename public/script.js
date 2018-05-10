@@ -1,5 +1,3 @@
-// var socket = io.connect('http://localhost:3000');
-
 function genMatrix(w, h) {
     var matrix = [];
     for(var y = 0; y < h; y++) {
@@ -24,14 +22,19 @@ function genMatrix(w, h) {
 }
 
 var matrix;
-var w = 30;
-var h = 30;
-var side = 24;
+var w = 30, h = 30 , side = 24;
 var grassArr = [], grassEaterArr = [], predatorArr = [], virusArr = [];
 
 function setup() {
+    // connection to server
     var socket = io.connect('http://localhost:3000');
-    matrix = genMatrix(w, h);
+    socket.on("initial data for canvas", function (data) {
+        w = data.width;
+        h = data.height;
+        side = data.side;
+        matrix = data.matrix;
+    });
+    
     createCanvas(side * w, side * h);
     background("#acacac");
     frameRate(5);
@@ -54,53 +57,6 @@ function setup() {
 }
 
 function draw() {
+    // console.log(w + "," + h + "," + side + ",");
     background("#acacac");
-    for(var y in matrix) {
-        for(var x in matrix[y]) {
-            // normal
-            if(matrix[y][x] == 0) {
-                fill("#acacac");
-            }
-            else if(matrix[y][x] == 1) {
-                fill("green");
-            }
-            else if(matrix[y][x] == 2) {
-                fill("yellow");
-            }
-            else if(matrix[y][x] == 3) {
-                fill("red");
-            }
-            else if(matrix[y][x] == 4) {
-                fill("black");
-            }
-            // infected grasseater
-            else if(matrix[y][x] == 5) {
-                fill("#D0D000");
-            }
-            rect(x * side, y * side, side, side);
-        }
-    }
-
-    for(var i in grassArr) {
-        grassArr[i].mul();
-    }
-
-    for(var i in grassEaterArr) {
-        grassEaterArr[i].mul();
-        grassEaterArr[i].eat();
-        grassEaterArr[i].die();
-    }
-
-    for(var i in predatorArr) {
-        predatorArr[i].mul();
-        predatorArr[i].eat();
-        predatorArr[i].die();
-    }
-
-    for(var i in virusArr) {
-        virusArr[i].mul();
-        // virusArr[i].move();
-        virusArr[i].infect();
-        virusArr[i].die();
-    }
 }
