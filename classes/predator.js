@@ -1,4 +1,4 @@
-class Predator extends LivingCreature {
+module.exports = class Predator extends LivingCreature {
     constructor(x, y, index) {
         super(x, y, index);
         this.energy = Math.round(Math.random() * 16);

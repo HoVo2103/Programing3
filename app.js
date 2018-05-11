@@ -4,6 +4,23 @@ var app = express();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
 
+// my functions
+function my_random(max, min = 0) {
+    if (Number.isInteger(min) && Number.isInteger(max)) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+    else if (min == 0, Array.isArray(max) ) {
+        return max[Math.floor(Math.random() * max.length)];
+    }
+}
+
+// classes
+global.LivingCreature = require("./classes/livingCreature.js");
+var Grass = require("./classes/grass.js");
+var GrassEater = require("./classes/grassEater.js");
+var Predator = require("./classes/predator.js");
+var Virus = require("./classes/virus.js");
+
 app.use(express.static("public"));
 
 // Paths
@@ -29,19 +46,13 @@ server.listen(3000, function () {
 });
 
 // part of the game
-function my_random(max, min = 0) {
-    if (Number.isInteger(min) && Number.isInteger(max)) {
-        return Math.floor(Math.random() * (max - min + 1)) + min;
-    }
-}
-
 function gen_matrix(w, h) {
     var matrix = [];
     for (var y = 0; y < h; y++) {
         matrix[y] = [];
         for (var x = 0; x < w; x++) {
             var r = my_random(100);
-            if      (r < 20) r = 0;
+            if (r < 20) r = 0;
             else if (r < 65) r = 1;
             else if (r < 90) r = 2;
             else if (r < 100) r = 3;
@@ -64,7 +75,8 @@ var side = 24;
 var matrix = gen_matrix(w, h);
 var grassArr = [], grassEaterArr = [], predatorArr = [], virusArr = [];
 
-var objForSend = {
+// objects for send
+var initialObj = {
     "width": w,
     "height": h,
     "side": side,
@@ -73,56 +85,35 @@ var objForSend = {
 
 // server & client contact
 io.on("connection", function (socket) {
-    io.sockets.emit("initial data for canvas", objForSend);
+    io.sockets.emit("initial data for canvas", initialObj);
 
-    var clrText;
-    setInterval(function () {
-        for (var y in matrix) {
-            for (var x in matrix[y]) {
-                // normal
-                if (matrix[y][x] == 0) {
-                    // fill("#acacac");
-                }
-                else if (matrix[y][x] == 1) {
-                    // fill("green");
-                }
-                else if (matrix[y][x] == 2) {
-                    // fill("yellow");
-                }
-                else if (matrix[y][x] == 3) {
-                    // fill("red");
-                }
-                else if (matrix[y][x] == 4) {
-                    // fill("black");
-                }
-                // infected grasseater
-                else if (matrix[y][x] == 5) {
-                    // fill("#D0D000");
-                }
-                // rect(x * side, y * side, side, side);
-            }
-        }
-    
-        for (var i in grassArr) {
-            grassArr[i].mul();
-        }
-    
-        for (var i in grassEaterArr) {
-            grassEaterArr[i].mul();
-            grassEaterArr[i].eat();
-            grassEaterArr[i].die();
-        }
-    
-        for (var i in predatorArr) {
-            predatorArr[i].mul();
-            predatorArr[i].eat();
-            predatorArr[i].die();
-        }
-    
-        for (var i in virusArr) {
-            virusArr[i].mul();
-            virusArr[i].infect();
-            virusArr[i].die();
-        }
-    }, 200);
+    // get arrays
+    socket.on("push new object", function (data) {
+        if (data.name == "grass") grassArr.push(new Grass(data.x * 1, data.y * 1, 1));
+        else if (data.name == "grassEater") grassEaterArr.push(new GrassEater(data.x * 1, data.y * 1, 1));
+        else if (data.name == "predator") predatorArr.push(new Predator(data.x * 1, data.y * 1, 1));
+        else if (data.name == "virus") virusArr.push(new Virus(data.x * 1, data.y * 1, 1));
+    });
+
+    for (var i in grassArr) {
+        grassArr[i].mul();
+    }
+
+    for (var i in grassEaterArr) {
+        grassEaterArr[i].mul();
+        grassEaterArr[i].eat();
+        grassEaterArr[i].die();
+    }
+
+    for (var i in predatorArr) {
+        predatorArr[i].mul();
+        predatorArr[i].eat();
+        predatorArr[i].die();
+    }
+
+    for (var i in virusArr) {
+        virusArr[i].mul();
+        virusArr[i].infect();
+        virusArr[i].die();
+    }
 });

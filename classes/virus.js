@@ -1,4 +1,4 @@
-class Virus extends LivingCreature {
+module.exports = class Virus extends LivingCreature {
     constructor(x, y, index) {
         super(x, y, index);
         this.energy = Math.round(Math.random() * 10);
